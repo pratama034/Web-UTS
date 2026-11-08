@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
+  <defs>
+    <linearGradient id="kmGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0051D5"/>
+      <stop offset="100%" stop-color="#003EA8"/>
+    </linearGradient>
+  </defs>
+  <rect width="40" height="40" rx="10" fill="url(#kmGrad)"/>
+  <path d="M11 29V15.5C11 14.6716 11.6716 14 12.5 14H21.5C22.3284 14 23 14.6716 23 15.5V29" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M23 19H27.5C28.3284 19 29 19.6716 29 20.5V29" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M9 29H31" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
+  <rect x="14.2" y="17.2" width="2.4" height="2.4" rx="0.6" fill="#FFFFFF"/>
+  <rect x="18.4" y="17.2" width="2.4" height="2.4" rx="0.6" fill="#FFFFFF"/>
+  <rect x="14.2" y="21.2" width="2.4" height="2.4" rx="0.6" fill="#FFFFFF"/>
+  <rect x="18.4" y="21.2" width="2.4" height="2.4" rx="0.6" fill="#FFFFFF"/>
+  <path d="M15.5 29V25.8C15.5 25.3582 15.8582 25 16.3 25H17.7C18.1418 25 18.5 25.3582 18.5 25.8V29" fill="#FFFFFF"/>
+  <rect x="25" y="22" width="2" height="2" rx="0.5" fill="#85F8C4"/>
+  <rect x="25" y="25.2" width="2" height="2" rx="0.5" fill="#85F8C4"/>
+  <path d="M14.5 11.5L17 9.5L19.5 11.5" stroke="#85F8C4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+

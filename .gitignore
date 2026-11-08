@@ -1,0 +1,21 @@
+# Dependencies & Build
+/vendor/
+/node_modules/
+
+# Archives & Temporary files
+*.zip
+*.tar.gz
+*.rar
+*.log
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
