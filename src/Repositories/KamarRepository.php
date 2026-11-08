@@ -32,6 +32,20 @@ final class KamarRepository
     }
 
     /**
+     * @return list<array{id: int|string, nama_kos: string}>
+     */
+    public function findAllKos(): array
+    {
+        $statement = $this->connection->query(
+            'SELECT id, nama_kos
+             FROM kos
+             ORDER BY nama_kos'
+        );
+
+        return $statement->fetchAll();
+    }
+
+    /**
      * @return list<array<string, mixed>>
      */
     public function findAllWithDetails(): array
@@ -171,13 +185,77 @@ final class KamarRepository
 
     private function assertValidKamar(Kamar $kamar): void
     {
-        if ($kamar->kosId < 1 || trim($kamar->nomorKamar) === '' || trim($kamar->tipe) === '') {
-            throw new InvalidArgumentException('Kos, nomor kamar, dan tipe kamar wajib diisi.');
+        $nomorKamar = trim($kamar->nomorKamar);
+        $tipe = trim($kamar->tipe);
+
+        if ($kamar->kosId < 1) {
+            throw new InvalidArgumentException('Properti kos wajib dipilih.');
         }
 
-        if (!is_numeric($kamar->hargaBulanan) || (float) $kamar->hargaBulanan <= 0) {
-            throw new InvalidArgumentException('Harga bulanan harus berupa angka lebih dari nol.');
+        if (!$this->kosExists($kamar->kosId)) {
+            throw new InvalidArgumentException('Properti kos yang dipilih tidak ditemukan.');
         }
+
+        if ($nomorKamar === '') {
+            throw new InvalidArgumentException('Nomor kamar wajib diisi.');
+        }
+
+        if (mb_strlen($nomorKamar) > 50) {
+            throw new InvalidArgumentException('Nomor kamar maksimal 50 karakter.');
+        }
+
+        if ($tipe === '') {
+            throw new InvalidArgumentException('Tipe kamar wajib diisi.');
+        }
+
+        if (mb_strlen($tipe) > 100) {
+            throw new InvalidArgumentException('Tipe kamar maksimal 100 karakter.');
+        }
+
+        if (!is_numeric($kamar->hargaBulanan)) {
+            throw new InvalidArgumentException('Harga bulanan harus berupa angka.');
+        }
+
+        $harga = (float) $kamar->hargaBulanan;
+
+        if ($harga <= 0) {
+            throw new InvalidArgumentException('Harga bulanan harus lebih dari nol.');
+        }
+
+        if ($harga > 9999999999.99) {
+            throw new InvalidArgumentException('Harga bulanan melebihi batas maksimum.');
+        }
+
+        if ($this->existsByNomorKamar($kamar->kosId, $nomorKamar, $kamar->id)) {
+            throw new InvalidArgumentException('Nomor kamar sudah digunakan pada properti kos ini.');
+        }
+    }
+
+    private function kosExists(int $kosId): bool
+    {
+        $statement = $this->connection->prepare('SELECT 1 FROM kos WHERE id = :id LIMIT 1');
+        $statement->execute(['id' => $kosId]);
+
+        return $statement->fetchColumn() !== false;
+    }
+
+    private function existsByNomorKamar(int $kosId, string $nomorKamar, ?int $exceptId = null): bool
+    {
+        $sql = 'SELECT 1 FROM kamar WHERE kos_id = :kos_id AND nomor_kamar = :nomor_kamar';
+        $parameters = [
+            'kos_id' => $kosId,
+            'nomor_kamar' => $nomorKamar,
+        ];
+
+        if ($exceptId !== null) {
+            $sql .= ' AND id <> :id';
+            $parameters['id'] = $exceptId;
+        }
+
+        $statement = $this->connection->prepare($sql . ' LIMIT 1');
+        $statement->execute($parameters);
+
+        return $statement->fetchColumn() !== false;
     }
 
     private function assertValidId(int $id): void

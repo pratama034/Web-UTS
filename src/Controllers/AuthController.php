@@ -23,7 +23,7 @@ final class AuthController
 
         $error = null;
         $username = '';
-        $escape = PublicController::escape(...);
+        $escape = self::escape(...);
 
         require dirname(__DIR__, 2) . '/views/admin/login.php';
     }
@@ -37,7 +37,7 @@ final class AuthController
 
         if (!verify_csrf()) {
             $error = 'Sesi keamanan halaman telah kedaluwarsa (CSRF tidak valid). Silakan ulangi login.';
-            $escape = PublicController::escape(...);
+            $escape = self::escape(...);
             http_response_code(419);
             require dirname(__DIR__, 2) . '/views/admin/login.php';
             return;
@@ -45,7 +45,7 @@ final class AuthController
 
         if ($username === '' || $password === '') {
             $error = 'Username dan password wajib diisi.';
-            $escape = PublicController::escape(...);
+            $escape = self::escape(...);
             http_response_code(422);
             require dirname(__DIR__, 2) . '/views/admin/login.php';
             return;
@@ -93,7 +93,7 @@ final class AuthController
         }
 
         $error = 'Username atau password yang Anda masukkan salah.';
-        $escape = PublicController::escape(...);
+        $escape = self::escape(...);
         http_response_code(401);
 
         require dirname(__DIR__, 2) . '/views/admin/login.php';
@@ -149,6 +149,11 @@ final class AuthController
         if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
             session_start();
         }
+    }
+
+    private static function escape(mixed $value): string
+    {
+        return htmlspecialchars((string) ($value ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 }
 

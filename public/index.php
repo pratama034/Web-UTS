@@ -5,6 +5,7 @@ declare(strict_types=1);
 use KosManager\Core\Router;
 use KosManager\Controllers\AuthController;
 use KosManager\Controllers\DashboardController;
+use KosManager\Controllers\KamarController;
 use KosManager\Repositories\KamarRepository;
 use KosManager\Repositories\PenghuniRepository;
 
@@ -34,6 +35,7 @@ try {
     $penghuniRepository = new PenghuniRepository($connection);
 
     $dashboardController = new DashboardController($kamarRepository, $penghuniRepository);
+    $kamarController = new KamarController($kamarRepository);
     $authController = new AuthController($connection);
 
     $router = new Router();
@@ -42,7 +44,13 @@ try {
         ->get('/login', [$authController, 'showLogin'])
         ->post('/login', [$authController, 'login'])
         ->get('/logout', [$authController, 'logout'])
-        ->get('/admin/dashboard', [$dashboardController, 'index']);
+        ->get('/admin/dashboard', [$dashboardController, 'index'])
+        ->get('/kamar', [$kamarController, 'index'])
+        ->get('/kamar/tambah', [$kamarController, 'create'])
+        ->get('/kamar/ubah', [$kamarController, 'edit'])
+        ->post('/kamar', [$kamarController, 'store'])
+        ->post('/kamar/update', [$kamarController, 'update'])
+        ->post('/kamar/hapus', [$kamarController, 'delete']);
 
     $router->dispatch();
 } catch (Throwable $exception) {
